@@ -4,7 +4,6 @@ import java.util.Scanner;
 public class Game {
     public int prizeDoor;
     public int chosenDoor;
-    public boolean change;
     public int iteration;
     public Door[] doorList = new Door[3];
     public static SecureRandom rand = new SecureRandom();
@@ -19,18 +18,26 @@ public class Game {
     public static void main(String[] args) {
         Game game = new Game();
 
-        game.inputChoice();
+        boolean change = inputChoice();
         game.inputIteration();
 
         for (int i = game.iteration; i > 0; i--) {
-            game.runGame();
+            game.runGame(change);
         }
 
         System.out.println("Wins: " + wins + "\nLosses: " + losses);
     }
 
+    public void runGame(boolean change) {
+        // choose door at random
+        this.chooseDoor();
+        this.revealDoor();
+        this.changeDoor(change);
+        this.gameResult();
+        this.initGame();
+    }
+
     public void initGame() {
-        change = false;
         prizeDoor = rand.nextInt(3);
 
         // init doors
@@ -47,20 +54,11 @@ public class Game {
         // System.out.println("Game initiated");
     }
 
-    public void runGame() {
-        // choose door at random
-        this.chooseDoor();
-        this.revealDoor();
-        this.changeDoor();
-        this.gameResult();
-        this.initGame();
-    }
-
     // get input for changing choice
-    public void inputChoice() {
+    public static boolean inputChoice() {
         System.out.print("Will you change doors in this simulation? (Y/N): ");
         String choiceStr = input.next().toLowerCase();
-        this.change = choiceStr.equals("y");
+        return choiceStr.equals("y");
     }
 
     public void inputIteration() {
@@ -97,8 +95,8 @@ public class Game {
     }
 
     // change or maintains chosen door according to input value
-    public void changeDoor() {
-        if (this.change) {
+    public void changeDoor(boolean change) {
+        if (change) {
             int newDoor = 0;
 
             for (int i = 0; i < 3; i++) {
