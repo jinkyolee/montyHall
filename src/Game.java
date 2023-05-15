@@ -5,6 +5,7 @@ public class Game {
     public int prizeDoor;
     public int chosenDoor;
     public int iteration;
+    public boolean change;
     public Door[] doorList = new Door[3];
     public static SecureRandom rand = new SecureRandom();
     public static Scanner input = new Scanner(System.in);
@@ -18,21 +19,21 @@ public class Game {
     public static void main(String[] args) {
         Game game = new Game();
 
-        boolean change = inputChoice();
+        game.inputChoice();
         game.inputIteration();
 
         for (int i = game.iteration; i > 0; i--) {
-            game.runGame(change);
+            game.runGame();
         }
 
         System.out.println("Wins: " + wins + "\nLosses: " + losses);
     }
 
-    public void runGame(boolean change) {
+    public void runGame() {
         // choose door at random
         this.chooseDoor();
         this.revealDoor();
-        this.changeDoor(change);
+        this.changeDoor();
         this.gameResult();
         this.initGame();
     }
@@ -55,10 +56,10 @@ public class Game {
     }
 
     // get input for changing choice
-    public static boolean inputChoice() {
+    public void inputChoice() {
         System.out.print("Will you change doors in this simulation? (Y/N): ");
         String choiceStr = input.next().toLowerCase();
-        return choiceStr.equals("y");
+        change = choiceStr.equals("y");
     }
 
     public void inputIteration() {
@@ -95,7 +96,7 @@ public class Game {
     }
 
     // change or maintains chosen door according to input value
-    public void changeDoor(boolean change) {
+    public void changeDoor() {
         if (change) {
             int newDoor = 0;
 
